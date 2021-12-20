@@ -1,10 +1,12 @@
-import express from 'express'
-import helmet from 'helmet'
-import morgan from 'morgan'
-import mongoose from 'mongoose'
-import cors from 'cors'
-import http from 'http'
-import { Server } from 'socket.io'
+const express = require('express')
+const helmet = require('helmet')
+const morgan = require('morgan')
+const mongoose = require('mongoose')
+const cors = require('cors')
+const http = require('http')
+const socketio = require('socket.io')
+const apiRoutes = require('./routes/api')
+const authRoutes = require('./routes/auth')
 
 //@ App Initialization
 const app = express()
@@ -13,7 +15,7 @@ const app = express()
 const server = http.createServer(app)
 
 //@ Socket IO Intialization
-const io = new Server(server,{
+const io = new socketio.Server(server,{
   cors: {
      origin: "http://localhost:3000",
      methods: ["GET", "POST"]
@@ -26,6 +28,10 @@ app.use(express.urlencoded({ extended: false }))
 app.use(helmet())
 app.use(morgan('tiny'))
 app.use(cors())
+
+//@ Routes
+app.use('/auth',authRoutes)
+app.use('/api',apiRoutes)
 
 //@ MongoDB Initialization
 mongoose.connect("mongodb://localhost/converse")
