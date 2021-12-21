@@ -5,8 +5,10 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const http = require('http')
 const socketio = require('socket.io')
+const cookieParser = require('cookie-parser')
 const apiRoutes = require('./routes/api')
 const authRoutes = require('./routes/auth')
+const dotenv = require('dotenv')
 
 //@ App Initialization
 const app = express()
@@ -28,6 +30,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use(helmet())
 app.use(morgan('tiny'))
 app.use(cors())
+app.use(cookieParser())
+dotenv.config()
 
 //@ Routes
 app.use('/auth',authRoutes)
@@ -40,7 +44,7 @@ mongoose.connect("mongodb://localhost/converse")
 
 //@ Server Io Logic
 io.on('connection', (socket) => {
-  console.log(socket.id);
+  console.log(socket.handshake.query.chatId);
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
