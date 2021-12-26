@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser')
 const apiRoutes = require('./routes/api')
 const authRoutes = require('./routes/auth')
 const dotenv = require('dotenv')
+const { socketIoLogic } = require('./socket/socket_io_logic')
 
 //@ App Initialization
 const app = express()
@@ -42,13 +43,10 @@ mongoose.connect("mongodb://localhost/converse")
         .then(() => console.log("Mongo DB Connection Successful"))
         .catch(() => console.log("Mongo DB Connection Failure"))
 
+        
 //@ Server Io Logic
-io.on('connection', (socket) => {
-  console.log(socket.handshake.query.chatId);
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+socketIoLogic(io)
+
 
 //@ Server listening port
 server.listen(5000, () => console.log("Server listening on port 5000"))

@@ -1,10 +1,10 @@
 const router = require('express').Router()
-const User = require('../models/User')
+const { User } = require('../models/User')
 const jwt = require('jsonwebtoken')
 const { checkToken } = require('../middleware/middleware')
 
 router.route('/signup').post( async (req,res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, chatId } = req.body;
 
   const userWithThisUsername = await User.findOne({ username: username })
   if(userWithThisUsername) return res.send({ operation : false, feedback:"Username Taken" })
@@ -12,7 +12,7 @@ router.route('/signup').post( async (req,res) => {
   const userWithThisEmail = await User.findOne({ email: email })
   if(userWithThisEmail) return res.send({ operation : false, feedback:"Email Already Exists" })
   
-  await User.create({ username, email, password })
+  await User.create({ username, email, password, chatId })
   return res.send({ operation :true,feedback:"Account Created Succesfully" })
 })
 
