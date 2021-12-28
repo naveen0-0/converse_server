@@ -38,6 +38,17 @@ const socketIoLogic = (io) => {
       socket.broadcast.to(friendChatId).emit('friend_request_declined_receiver', id)
     })
     
+    //@ Sending Messages
+    socket.on("send_msg", async data => {
+      const { id, sender, receiver, message, time, chatId, friendChatId } = data;
+      //@ Todo Append a message
+      let msgInsert = await Friends.updateOne({ _id: id },{ 
+        $push: { messages : { sender, receiver, message, time } }
+      })
+      socket.emit('send_msg_sender', { id : id, info : { sender , receiver, message, time } });
+      socket.broadcast.to(friendChatId).emit('send_msg_receiver', { id : id, info : { sender , receiver, message, time } })
+    })
+    
     
     socket.on('disconnect', () => { console.log('user disconnected') })
   });

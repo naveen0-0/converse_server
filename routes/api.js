@@ -24,18 +24,18 @@ router.route('/search').post(async (req,res) => {
 
 router.route('/friends').post(async (req,res) => {
   const { username } = req.body;
-  let friends = await Friends.find( { $or: [ { friend1:username }, { friend2: username } ] },{ messages :0 } )
+  let friends = await Friends.find({ $or: [ { friend1:username }, { friend2: username } ] })
   res.json(friends)
 })
 
-router.route('/messages').post(async (req,res) => {
-  const { selectedFriendsId } = req.body;
-  let messagesObj = await Friends.findOne({ _id : selectedFriendsId }, { messages : 1, _id : 0 })
-  if(messagesObj === null){
-    return res.json([])
-  }
-  res.json(messagesObj.messages)
-})
+// router.route('/messages').post(async (req,res) => {
+//   const { selectedFriendsId } = req.body;
+//   let messagesObj = await Friends.findOne({ _id : selectedFriendsId }, { messages : 1, _id : 0 })
+//   if(messagesObj === null){
+//     return res.json([])
+//   }
+//   res.json(messagesObj.messages)
+// })
 
 
 

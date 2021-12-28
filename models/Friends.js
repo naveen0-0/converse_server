@@ -4,7 +4,7 @@ const messageSchema = new Schema({
   sender : { type: String , required: true },
   receiver : { type: String , required: true },
   message : { type: String, required: true },
-  time : { type : Date, required:true, default : Date.now }
+  time : { type : Date, required:true }
 })
 
 const friendsSchema = new Schema({
