@@ -20,7 +20,7 @@ const server = http.createServer(app)
 //@ Socket IO Intialization
 const io = new socketio.Server(server,{
   cors: {
-     origin: "https://converse-1910.netlify.app/",
+     origin: "https://converse-1910.netlify.app",
      methods: ["GET", "POST"]
   }
 })
