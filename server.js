@@ -35,6 +35,8 @@ app.use(cookieParser())
 dotenv.config()
 
 //@ Routes
+
+app.get('/', (req,res) => res.send({ message : "Welcome to the converse_server" }))
 app.use('/auth',authRoutes)
 app.use('/api',apiRoutes)
 
