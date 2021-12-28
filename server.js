@@ -39,7 +39,7 @@ app.use('/auth',authRoutes)
 app.use('/api',apiRoutes)
 
 //@ MongoDB Initialization
-mongoose.connect("mongodb://localhost/converse")
+mongoose.connect(process.env.MONGO)
         .then(() => console.log("Mongo DB Connection Successful"))
         .catch(() => console.log("Mongo DB Connection Failure"))
 
@@ -49,4 +49,4 @@ socketIoLogic(io)
 
 
 //@ Server listening port
-server.listen(5000, () => console.log("Server listening on port 5000"))
+server.listen(process.env.PORT, () => console.log(`Server listening on port ${process.env.PORT}`))
