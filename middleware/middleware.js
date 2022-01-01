@@ -9,9 +9,8 @@ const checkToken = (req,res,next) => {
         next();
     })
   }else{
-    res.send({ operation:false, msg:"You have to be logged in to perform this action" })
+    return res.send({ operation:false, msg:"You have to be logged in to perform this action" })
   }
-
 }
 
 module.exports = {

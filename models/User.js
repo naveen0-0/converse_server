@@ -5,11 +5,16 @@ const RequiredString = {
   required:true,
 }
 
+const groupIdsSchema = new Schema({
+  groupId:RequiredString
+})
+
 const userSchema = new Schema({
   username: RequiredString,
   email:RequiredString,
   password:RequiredString,
-  chatId: RequiredString
+  chatId: RequiredString,
+  groupIds:[groupIdsSchema]
 })
 
 const User = model('user',userSchema)

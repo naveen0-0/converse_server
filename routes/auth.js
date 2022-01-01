@@ -32,8 +32,12 @@ router.route('/login').post( async (req,res) => {
 })
 
 router.route('/getuser').get(checkToken,async (req, res) => {
-  const user = await User.findOne({ username: req.user.username })
-  res.send({ operation : true, user: { username: user.username, email:user.email, loggedIn:true, chatId : user.chatId }})
+  try {
+    const user = await User.findOne({ username: req.user.username })
+    res.send({ operation : true, user: { username: user.username, email:user.email, loggedIn:true, chatId : user.chatId }})
+  } catch (error) {
+    res.send({ operation : false, feedback : "Can't Perform this action" })
+  }
 })
 
 module.exports = router;

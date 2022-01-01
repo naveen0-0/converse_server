@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../models/User')
 const { Friends } = require('../models/Friends')
+const { Group } = require('../models/Group')
 
 router.route('/search').post(async (req,res) => {
   const { text, user } = req.body;
@@ -21,23 +22,36 @@ router.route('/search').post(async (req,res) => {
   return res.send({ statusnum: 4, feedback : "Request Pending", user:{ username : thisuser.username, chatId:thisuser.chatId }})
 })
 
-
 router.route('/friends').post(async (req,res) => {
   const { username } = req.body;
   let friends = await Friends.find({ $or: [ { friend1:username }, { friend2: username } ] })
   res.json(friends)
 })
 
-// router.route('/messages').post(async (req,res) => {
-//   const { selectedFriendsId } = req.body;
-//   let messagesObj = await Friends.findOne({ _id : selectedFriendsId }, { messages : 1, _id : 0 })
-//   if(messagesObj === null){
-//     return res.json([])
-//   }
-//   res.json(messagesObj.messages)
-// })
+//@ Creating a group
+router.route('/create_group').post(async (req,res) => {
+  const { username, groupId, groupName } = req.body
+  const group = await Group.findOne({ groupName })
+  if( group !== null ) return res.send({ operation : false, feedback : "Group name taken" })
+  const newGroup = await Group.create({ groupName, groupId, admin: username })
+
+  let groupIdInsert = await User.updateOne({ username : username },{ 
+    $push: { groupIds : { groupId } }
+  })
+  return res.send({ operation: true, group: newGroup })
+})
 
 
+//* Fetch All Groups
+router.route('/groups').post(async (req,res) => {
+  const { username } = req.body
+  let groups = await Group.find( { $or: [
+    { admin: username }, 
+    { users : { username : username }} 
+  ]})
+
+  res.json(groups)
+})
 
 
 
