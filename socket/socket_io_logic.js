@@ -74,8 +74,6 @@ const socketIoLogic = (io) => {
       })
       io.to(groupId).emit('group_send_msg', data);
     })
-
-    
     
     socket.on('disconnect', () => { console.log('user disconnected') })
   });
