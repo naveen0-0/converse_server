@@ -47,7 +47,7 @@ router.route('/groups').post(async (req,res) => {
   const { username } = req.body
   let groups = await Group.find( { $or: [
     { admin: username }, 
-    { users : { username : username }} 
+    { users : { $elemMatch : { username:username } }} 
   ]})
 
   res.json(groups)
@@ -57,20 +57,20 @@ router.route('/add_to_group').post(async (req,res) => {
   const { name, groupId } = req.body
   const user = await User.findOne({ username : name })
 
+
   if(user === null) return res.send({ operation : false, feedback : "No User With That Name" })
   let userWithThatName = await Group.findOne({ 
     $and : [
       { groupId : groupId },
       { $or : [
         { admin : name },
-        { users : { username : name }}
+        { users : { $elemMatch : { username : name } }}
       ]}
     ]
   })
 
-
   if(userWithThatName === null) return res.send({ operation : true, user: { chatId : user.chatId, username : user.username } })
-  return res.send({ operation : false , feedback : "Already in the group" })
+  return res.send({ operation : false , feedback : `${user.username}, Already in the group` })
 })
 
 

@@ -74,6 +74,40 @@ const socketIoLogic = (io) => {
       })
       io.to(groupId).emit('group_send_msg', data);
     })
+
+    //@ Adding someone to the group
+    socket.on('add_user_to_the_group', async data => {
+
+      const { chatId, username, groupId } = data;
+      let userWithThatName = await Group.findOne({ 
+        $and : [
+          { groupId : groupId },
+          { $or : [
+            { admin : username },
+            { users : { $elemMatch : { username : username } }}
+          ]}
+        ]
+      })
+
+
+      if(userWithThatName === null){
+        let userInsert = await Group.updateOne({ groupId },{ $push: { users : { username, role:"member" }} })
+        let groupIdInsert = await User.updateOne({ username },{ $push: { groupIds : { groupId }} })
+          
+        socket.broadcast.to(chatId).emit('add_user_to_the_group', data)
+        io.to(groupId).emit('add_user_to_the_group_in_redux', data)
+      }
+
+    })
+    
+      
+    socket.on('add_user_to_the_group_success', async data => {
+      const { chatId, username, groupId } = data;
+      socket.join(groupId)
+      let group = await Group.findOne({ groupId })
+
+      socket.emit('add_group_to_the_user_in_redux', group)
+    })
     
     socket.on('disconnect', () => { console.log('user disconnected') })
   });
