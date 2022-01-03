@@ -21,7 +21,7 @@ const server = http.createServer(app)
 const clientURL = "https://converse-1910.netlify.app"
 const io = new socketio.Server(server,{
   cors: {
-     origin: "http://localhost:3000",
+     origin: clientURL,
      methods: ["GET", "POST"]
   }
 })
