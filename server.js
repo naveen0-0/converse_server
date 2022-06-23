@@ -18,7 +18,7 @@ const app = express()
 const server = http.createServer(app)
 
 //@ Socket IO Intialization
-const clientURL = "https://converse-1910.netlify.app"
+const clientURL =  "https://converse-1910.netlify.app"
 const io = new socketio.Server(server,{
   cors: {
      origin: clientURL,
