@@ -27,7 +27,7 @@ const socketIoLogic = (io) => {
 
     //@ Accepting Friend Request
     socket.on("accept_friend_request", async data => {
-      const { chatId, friendChatId, id } = data;
+      const { friendChatId, id } = data;
       let friends = await Friends.updateOne({ _id: id },{ requestAcceptedOrNot : true })
       socket.emit('friend_request_accepted_sender', id);
       socket.broadcast.to(friendChatId).emit('friend_request_accepted_receiver', id)
@@ -35,7 +35,7 @@ const socketIoLogic = (io) => {
 
     //@ Declining Friend Request
     socket.on("decline_friend_request", async data => {
-      const { chatId, friendChatId, id } = data;
+      const { friendChatId, id } = data;
       let friends = await Friends.deleteOne({ _id: id })
       socket.emit('friend_request_declined_sender', id);
       socket.broadcast.to(friendChatId).emit('friend_request_declined_receiver', id)
