@@ -88,8 +88,6 @@ const socketIoLogic = (io) => {
           ]}
         ]
       })
-
-
       if(userWithThatName === null){
         let userInsert = await Group.updateOne({ groupId },{ $push: { users : { username, role:"member" }} })
         let groupIdInsert = await User.updateOne({ username },{ $push: { groupIds : { groupId }} })
