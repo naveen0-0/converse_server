@@ -23,7 +23,7 @@ const clientUrl = {
 
 const io = new socketio.Server(server,{
   cors: {
-     origin: clientUrl.PROD,
+     origin: clientUrl.DEV,
      methods: ["GET", "POST"]
   }
 })
